@@ -32,7 +32,10 @@ enum ActionType {
 type Action =
   | { type: ActionType.AccountDeposit; payload: number }
   | { type: ActionType.AccountWithdraw; payload: number }
-  | { type: ActionType.AccountRequestLoan; payload: number }
+  | {
+      type: ActionType.AccountRequestLoan;
+      payload: { amount: number; purpose: string };
+    }
   | { type: ActionType.AccountPayLoan; payload: number };
 
 const reducer = (state = initialState, action: Action) => {
@@ -46,12 +49,11 @@ const reducer = (state = initialState, action: Action) => {
       return { ...state, balance: balance - payload };
     }
     case ActionType.AccountRequestLoan: {
-      // TODO: check and add dispatch for loan purpose
       if (loan > 0) return state;
-      return { ...state, loan: payload };
+      const { amount, purpose } = payload;
+      return { ...state, loan: amount, loanPurpose: purpose };
     }
     case ActionType.AccountPayLoan: {
-      // TODO: check and add dispatch for loan purpose
       if (loan > 0) return state;
       return { ...state, loan: 0, loanPurpose: "", balance: balance - loan };
     }
@@ -62,5 +64,15 @@ const reducer = (state = initialState, action: Action) => {
 };
 
 const store = createStore(reducer);
-store.dispatch({ type: ActionType.AccountDeposit, payload: 12 });
+store.dispatch({ type: ActionType.AccountDeposit, payload: 2000 });
+store.dispatch({
+  type: ActionType.AccountRequestLoan,
+  payload: { amount: 1000, purpose: "To buy a cheapest mobile" },
+});
+
+// will not make a difference due to condition in reducer
+store.dispatch({
+  type: ActionType.AccountRequestLoan,
+  payload: { amount: 2000, purpose: "To buy a big mobile" },
+});
 console.log(store.getState());
