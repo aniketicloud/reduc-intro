@@ -36,20 +36,23 @@ type Action =
       type: ActionType.AccountRequestLoan;
       payload: { amount: number; purpose: string };
     }
-  | { type: ActionType.AccountPayLoan; payload: number };
+  | { type: ActionType.AccountPayLoan };
 
 const reducer = (state = initialState, action: Action) => {
-  const { payload, type } = action;
+  const { type } = action;
   const { balance, loan } = state;
   switch (type) {
     case ActionType.AccountDeposit: {
+      const { payload } = action;
       return { ...state, balance: balance + payload };
     }
     case ActionType.AccountWithdraw: {
+      const { payload } = action;
       return { ...state, balance: balance - payload };
     }
     case ActionType.AccountRequestLoan: {
       if (loan > 0) return state;
+      const { payload } = action;
       const { amount, purpose } = payload;
       return {
         ...state,
@@ -59,7 +62,6 @@ const reducer = (state = initialState, action: Action) => {
       };
     }
     case ActionType.AccountPayLoan: {
-      if (loan > 0) return state;
       return { ...state, loan: 0, loanPurpose: "", balance: balance - loan };
     }
 
@@ -80,4 +82,7 @@ store.dispatch({
   type: ActionType.AccountRequestLoan,
   payload: { amount: 2000, purpose: "To buy a big mobile" },
 });
-console.log(store.getState());
+console.log("after taking a loan", store.getState());
+
+store.dispatch({ type: ActionType.AccountPayLoan });
+console.log("after paying a loan", store.getState());
