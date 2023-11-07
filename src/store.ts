@@ -51,7 +51,12 @@ const reducer = (state = initialState, action: Action) => {
     case ActionType.AccountRequestLoan: {
       if (loan > 0) return state;
       const { amount, purpose } = payload;
-      return { ...state, loan: amount, loanPurpose: purpose };
+      return {
+        ...state,
+        loan: amount,
+        loanPurpose: purpose,
+        balance: balance + amount,
+      };
     }
     case ActionType.AccountPayLoan: {
       if (loan > 0) return state;
@@ -64,7 +69,7 @@ const reducer = (state = initialState, action: Action) => {
 };
 
 const store = createStore(reducer);
-store.dispatch({ type: ActionType.AccountDeposit, payload: 2000 });
+store.dispatch({ type: ActionType.AccountDeposit, payload: 300 });
 store.dispatch({
   type: ActionType.AccountRequestLoan,
   payload: { amount: 1000, purpose: "To buy a cheapest mobile" },
