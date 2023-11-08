@@ -70,19 +70,46 @@ const reducer = (state = initialState, action: Action) => {
   }
 };
 
+const deposit = (
+  amount: number
+): { type: ActionType.AccountDeposit; payload: number } => ({
+  type: ActionType.AccountDeposit,
+  payload: amount,
+});
+const withdraw = (
+  amount: number
+): { type: ActionType.AccountWithdraw; payload: number } => ({
+  type: ActionType.AccountWithdraw,
+  payload: amount,
+});
+const requestLoan = (
+  amount: number,
+  purpose: string
+): {
+  type: ActionType.AccountRequestLoan;
+  payload: { amount: number; purpose: string };
+} => ({
+  type: ActionType.AccountRequestLoan,
+  payload: {
+    amount,
+    purpose,
+  },
+});
+const payLoan = (): { type: ActionType.AccountPayLoan } => ({
+  type: ActionType.AccountPayLoan,
+});
+const amount = 300;
 const store = createStore(reducer);
-store.dispatch({ type: ActionType.AccountDeposit, payload: 300 });
 store.dispatch({
-  type: ActionType.AccountRequestLoan,
-  payload: { amount: 1000, purpose: "To buy a cheapest mobile" },
+  type: ActionType.AccountDeposit,
+  payload: amount,
 });
 
-// will not make a difference due to condition in reducer
-store.dispatch({
-  type: ActionType.AccountRequestLoan,
-  payload: { amount: 2000, purpose: "To buy a big mobile" },
-});
-console.log("after taking a loan", store.getState());
-
-store.dispatch({ type: ActionType.AccountPayLoan });
-console.log("after paying a loan", store.getState());
+store.dispatch(deposit(200));
+console.log(store.getState());
+store.dispatch(withdraw(50));
+console.log(store.getState());
+store.dispatch(requestLoan(500, "Pikachoo"));
+console.log(store.getState());
+store.dispatch(payLoan());
+console.log(store.getState());
