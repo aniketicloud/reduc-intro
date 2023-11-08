@@ -38,7 +38,7 @@ type Action =
     }
   | { type: ActionType.AccountPayLoan };
 
-const reducer = (state = initialState, action: Action) => {
+const accountReducer = (state = initialState, action: Action) => {
   const { type } = action;
   const { balance, loan } = state;
   switch (type) {
@@ -99,7 +99,7 @@ const payLoan = (): { type: ActionType.AccountPayLoan } => ({
   type: ActionType.AccountPayLoan,
 });
 const amount = 300;
-const store = createStore(reducer);
+const store = createStore(accountReducer);
 store.dispatch({
   type: ActionType.AccountDeposit,
   payload: amount,

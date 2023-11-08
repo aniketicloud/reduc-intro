@@ -14,9 +14,13 @@ const separator = "/";
 enum CustomerActions {
   base = "customer",
   createCustomer = "createCustomer",
+  updateCustomer = "updateCustomer",
 }
 enum ActionType {
   CreateCustomer = CustomerActions.base +
+    separator +
+    CustomerActions.createCustomer,
+  UpdateCustomer = CustomerActions.base +
     separator +
     CustomerActions.createCustomer,
 }
@@ -25,10 +29,14 @@ type CreateCustomer = {
   type: ActionType.CreateCustomer;
   payload: InitialStateCustomer;
 };
+type UpdateCustomer = {
+  type: ActionType.UpdateCustomer;
+  payload: string;
+};
 // ? Using discriminated unions
 type Action = CreateCustomer;
 
-const reducer = (state = initialStateCustomer, action: Action) => {
+const customerReducer = (state = initialStateCustomer, action: Action) => {
   const { type } = action;
   switch (type) {
     case ActionType.CreateCustomer:
@@ -40,7 +48,7 @@ const reducer = (state = initialStateCustomer, action: Action) => {
   return state;
 };
 
-console.log(reducer);
+console.log(customerReducer);
 
 const createCustomer = (
   fullName: string,
@@ -56,4 +64,12 @@ const createCustomer = (
   };
 };
 
+const updateCustomer = (fullName: string): UpdateCustomer => {
+  return {
+    type: ActionType.UpdateCustomer,
+    payload: fullName,
+  };
+};
+
 console.log(createCustomer("James Bond", "007"));
+console.log(updateCustomer("Bond James"));
