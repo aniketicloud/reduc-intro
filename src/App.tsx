@@ -3,7 +3,7 @@ import Customer from "./Customer";
 import AccountOperations from "./AccountOperations";
 import BalanceDisplay from "./BalanceDisplay";
 
-import "./store";
+import "./reducer/store";
 
 function App() {
   return (

@@ -1,5 +1,3 @@
-import { createStore } from "redux";
-
 interface InitialState {
   balance: number;
   loan: number;
@@ -38,7 +36,7 @@ type Action =
     }
   | { type: ActionType.AccountPayLoan };
 
-const accountReducer = (state = initialState, action: Action) => {
+export const accountReducer = (state = initialState, action: Action) => {
   const { type } = action;
   const { balance, loan } = state;
   switch (type) {
@@ -70,19 +68,19 @@ const accountReducer = (state = initialState, action: Action) => {
   }
 };
 
-const deposit = (
+export const deposit = (
   amount: number
 ): { type: ActionType.AccountDeposit; payload: number } => ({
   type: ActionType.AccountDeposit,
   payload: amount,
 });
-const withdraw = (
+export const withdraw = (
   amount: number
 ): { type: ActionType.AccountWithdraw; payload: number } => ({
   type: ActionType.AccountWithdraw,
   payload: amount,
 });
-const requestLoan = (
+export const requestLoan = (
   amount: number,
   purpose: string
 ): {
@@ -95,21 +93,6 @@ const requestLoan = (
     purpose,
   },
 });
-const payLoan = (): { type: ActionType.AccountPayLoan } => ({
+export const payLoan = (): { type: ActionType.AccountPayLoan } => ({
   type: ActionType.AccountPayLoan,
 });
-const amount = 300;
-const store = createStore(accountReducer);
-store.dispatch({
-  type: ActionType.AccountDeposit,
-  payload: amount,
-});
-
-store.dispatch(deposit(200));
-console.log(store.getState());
-store.dispatch(withdraw(50));
-console.log(store.getState());
-store.dispatch(requestLoan(500, "Pikachoo"));
-console.log(store.getState());
-store.dispatch(payLoan());
-console.log(store.getState());
